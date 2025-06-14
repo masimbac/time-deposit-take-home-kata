@@ -1,11 +1,12 @@
-package org.ikigaidigital;
+package org.ikigaidigital.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "timeDeposits")
@@ -14,8 +15,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TimeDeposit {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String planType;
     private Double balance;
     private int days;
+    @OneToMany(
+            mappedBy = "timeDeposit",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Withdrawal> withdrawals = new ArrayList<>();
 }

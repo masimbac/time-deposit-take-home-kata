@@ -1,5 +1,6 @@
 package org.ikigaidigital;
 
+import org.ikigaidigital.model.TimeDeposit;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -11,7 +12,7 @@ public class TimeDepositCalculatorTest {
     public void updateBalance_Test() {
         TimeDepositCalculator calc = new TimeDepositCalculator();
         List<TimeDeposit> plans = Arrays.asList(
-            new TimeDeposit(1,"basic", 1234567.00, 45)
+            new TimeDeposit(1,"basic", 1234567.00, 45, null)
         );
         calc.updateBalance(plans);
 
