@@ -1,17 +1,18 @@
-package org.ikigaidigital;
+package org.ikigaidigital.service;
 
 import org.ikigaidigital.model.TimeDeposit;
 import org.ikigaidigital.provider.InterestProvider;
 import org.ikigaidigital.provider.impl.BasicInterestProvider;
 import org.ikigaidigital.provider.impl.PremiumInterestProvider;
 import org.ikigaidigital.provider.impl.StudentInterestProvider;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class TimeDepositCalculator {
     private static final Map<String, InterestProvider> INTEREST_PROVIDERS = new HashMap<>();
     static {
