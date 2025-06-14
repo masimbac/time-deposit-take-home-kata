@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class TimeDeposit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String planType;
-    private Double balance;
+    private BigDecimal balance;
     private int days;
     @OneToMany(
             mappedBy = "timeDeposit",

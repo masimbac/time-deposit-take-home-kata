@@ -1,32 +1,30 @@
 package org.ikigaidigital;
 
 import org.ikigaidigital.model.TimeDeposit;
+import org.ikigaidigital.provider.InterestProvider;
+import org.ikigaidigital.provider.impl.BasicInterestProvider;
+import org.ikigaidigital.provider.impl.PremiumInterestProvider;
+import org.ikigaidigital.provider.impl.StudentInterestProvider;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TimeDepositCalculator {
+    private static final Map<String, InterestProvider> INTEREST_PROVIDERS = new HashMap<>();
+    static {
+        INTEREST_PROVIDERS.put("basic", new BasicInterestProvider());
+        INTEREST_PROVIDERS.put("student", new StudentInterestProvider());
+        INTEREST_PROVIDERS.put("premium", new PremiumInterestProvider());
+    }
+
     public void updateBalance(List<TimeDeposit> xs) {
-        for (int i = 0; i < xs.size(); i++) {
-            double interest = 0;
-
-            if (xs.get(i).getDays() > 30) {
-                if (xs.get(i).getPlanType().equals("student")) {
-                    if (xs.get(i).getDays() < 366) {
-                        interest += xs.get(i).getBalance() * 0.03 / 12;
-                    }
-                } else if (xs.get(i).getPlanType().equals("premium")) {
-                    if (xs.get(i).getDays() > 45) {
-                        interest += xs.get(i).getBalance() * 0.05 / 12;
-                    }
-                } else if (xs.get(i).getPlanType().equals("basic")) {
-                    interest += xs.get(i).getBalance() * 0.01 / 12;
-                }
-            }
-
-            double a2d = xs.get(i).getBalance() + (new BigDecimal(interest).setScale(2, RoundingMode.HALF_UP)).doubleValue();
-            xs.get(i).setBalance(a2d);
-        }
+        xs.forEach(x -> {
+            InterestProvider provider = INTEREST_PROVIDERS.get(x.getPlanType().toLowerCase());
+            BigDecimal interest = provider.computeInterest(x);
+            x.setBalance(x.getBalance().add(interest));
+        });
     }
 }
